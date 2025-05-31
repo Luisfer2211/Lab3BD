@@ -25,6 +25,7 @@ Este laboratorio consiste en una aplicación web que permite realizar operacione
 │       ├── index.html
 │       └── luchador_form.html
 ├── Parte_3/
+│   ├── Capturas_Funcionamiento.pdf
 │   └── analisis.pdf
 └── requirements.txt
 ```
@@ -40,6 +41,7 @@ Este laboratorio consiste en una aplicación web que permite realizar operacione
 - **Parte_2/DLL/**: Carpeta con scripts de create tables e inserts
 - **Parte_2/templates/**: Plantillas HTML para la interfaz web
 - **Parte_3/analisis.pdf**: Análisis reflexivo del proyecto
+- **Parte_3/Capturas_Funcionamiento.pdf**: Evidencias de funcionalidades básicas del laboratorio
 
 ## 🛠️ Requisitos Previos
 
