@@ -86,13 +86,14 @@ Este script solicitará tu contraseña de PostgreSQL y generará el archivo `con
 python Fase_2/models.py
 ```
 
-Esto creará las tablas necesarias en la base de datos `wwe_db` y generará el archivo `schema.sql`.
+Esto creará las tablas necesarias en la base de datos `wwe_db` y generará el archivo `schema.sql` (el mismo que está dentro de `DDL/`).
 
 ### 5. Insertar Datos de Prueba
 
 ```bash
 python Fase_2/inserts.py
 ```
+Esto le agregará datos a las tablas necesarias en la base de datos `wwe_db` y generará el archivo `inserts.sql` (el mismo que está dentro de `DDL/`).
 
 ### 6. Ejecutar la Aplicación
 
