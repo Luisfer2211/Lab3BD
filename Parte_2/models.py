@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine, Column, Integer, String, Date, Numeric, ForeignKey, CheckConstraint, UniqueConstraint, Boolean, Enum
 from sqlalchemy.orm import declarative_base, relationship
-from sqlalchemy import event, DDL, text
-from sqlalchemy.schema import CreateTable, CreateIndex
+from sqlalchemy import event, DDL
+from sqlalchemy.schema import CreateTable, CreateIndex, DropTable, MetaData
+from sqlalchemy.sql.ddl import CreateSchema
 import os
 
 # 1. Configuración de conexión
@@ -90,9 +91,9 @@ class LuchadorTitulo(Base):
         CheckConstraint('fecha_perdida IS NULL OR fecha_perdida > fecha_obtencion', name='check_fechas_titulo'),
     )
 
-# 3. Función para generar schema.sql
+# 3. Función para generar schema.sql CORREGIDA
 def generate_schema_file():
-    """Genera el archivo schema.sql con todo el DDL"""
+    """Genera el archivo schema.sql con todo el DDL corregido"""
     schema_content = []
     
     # 1. Crear tipos ENUM
@@ -114,13 +115,18 @@ def generate_schema_file():
     
     for table in tables:
         # Generar CREATE TABLE con todas las constraints
-        create_table = str(CreateTable(table).compile(engine))
+        create_table = str(CreateTable(table).compile(engine)).strip()
         schema_content.append(create_table + ";")
         
-        # Añadir índices adicionales (los UNIQUE constraints)
+        # Añadir índices adicionales (CORRECCIÓN: obtener nombres de columnas)
         for constraint in table.constraints:
             if isinstance(constraint, UniqueConstraint):
-                schema_content.append(f"CREATE UNIQUE INDEX {constraint.name} ON {table.name} ({', '.join(constraint.columns)});\n")
+                # Obtener nombres de columnas en lugar de objetos
+                column_names = [col.name for col in constraint.columns]
+                schema_content.append(
+                    f"ALTER TABLE {table.name} ADD CONSTRAINT {constraint.name} "
+                    f"UNIQUE ({', '.join(column_names)};"
+                )
     
     # 3. Crear vista
     schema_content.append("\n-- Creación de vista para el índice")
@@ -171,21 +177,27 @@ def create_view(target, connection, **kw):
 def create_database_structure():
     print("🧩 Creando estructura de base de datos...")
     
-    # Crear todas las tablas
-    Base.metadata.create_all(engine)
+    try:
+        # Crear todas las tablas
+        Base.metadata.create_all(engine)
+        
+        # Generar archivo schema.sql
+        generate_schema_file()
+        
+        print("✅ ¡Estructura creada exitosamente! Tablas:")
+        print("   - luchador")
+        print("   - show")
+        print("   - titulo")
+        print("   - lucha")
+        print("   - participacion")
+        print("   - luchador_titulo")
+        print("   - Vista: luchadores_con_titulos")
+        print("   - Archivo schema.sql generado")
     
-    # Generar archivo schema.sql
-    generate_schema_file()
-    
-    print("✅ ¡Estructura creada exitosamente! Tablas:")
-    print("   - luchador")
-    print("   - show")
-    print("   - titulo")
-    print("   - lucha")
-    print("   - participacion")
-    print("   - luchador_titulo")
-    print("   - Vista: luchadores_con_titulos")
-    print("   - Archivo schema.sql generado")
+    except Exception as e:
+        print(f"❌ Error durante la creación: {e}")
+        import traceback
+        traceback.print_exc()
 
 # 6. Ejecutar
 if __name__ == "__main__":

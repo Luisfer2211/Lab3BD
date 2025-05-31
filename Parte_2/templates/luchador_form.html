@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if luchador %}Editar{% else %}Nuevo{% endif %} Luchador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">{% if luchador %}Editar{% else %}Nuevo{% endif %} Luchador</h1>
+        
+        <form method="POST">
+            <!-- Campos básicos -->
+            <div class="mb-3">
+                <label class="form-label">Nombre*</label>
+                <input type="text" class="form-control" name="nombre" 
+                    value="{{ luchador.nombre if luchador }}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Apodo</label>
+                <input type="text" class="form-control" name="apodo" 
+                    value="{{ luchador.apodo if luchador }}">
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Peso (kg)*</label>
+                    <input type="number" step="0.1" class="form-control" name="peso_kg" 
+                        value="{{ luchador.peso_kg if luchador }}" min="0.1" max="299.9" required>
+                    <div class="form-text">Entre 0.1 y 299.9 kg</div>
+                </div>
+                <div class="col">
+                    <label class="form-label">Altura (cm)*</label>
+                    <input type="number" step="0.1" class="form-control" name="altura_cm" 
+                        value="{{ luchador.altura_cm if luchador }}" min="101" max="229" required>
+                    <div class="form-text">Entre 101 y 229 cm</div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Debut*</label>
+                <input type="date" class="form-control" name="debut" 
+                    value="{{ luchador.debut if luchador else '' }}" required>
+            </div>
+            
+            <!-- Títulos asociados (tabla intermedia) -->
+            <h3 class="mt-5">Títulos Ganados</h3>
+            <div id="titulos-container">
+                {% if luchador %}
+                    {% for titulo in luchador.titulos %}
+                        <div class="card mb-3 titulo-item">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Título</label>
+                                        <select class="form-select" name="titulo_id_{{ loop.index }}">
+                                            <option value="">Seleccionar título</option>
+                                            {% for t in titulos %}
+                                                <option value="{{ t.id }}" 
+                                                    {% if t.id == titulo.titulo_id %}selected{% endif %}>
+                                                    {{ t.nombre }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Fecha Obtención*</label>
+                                        <input type="date" class="form-control" 
+                                            name="fecha_obtencion_{{ loop.index }}" 
+                                            value="{{ titulo.fecha_obtencion }}" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Fecha Pérdida</label>
+                                        <input type="date" class="form-control" 
+                                            name="fecha_perdida_{{ loop.index }}" 
+                                            value="{{ titulo.fecha_perdida if titulo.fecha_perdida }}">
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <button type="button" class="btn btn-danger remove-titulo">Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <button type="button" id="add-titulo" class="btn btn-secondary mb-4">+ Añadir Título</button>
+            
+            <!-- Participaciones (tabla intermedia) -->
+            <h3 class="mt-5">Participaciones en Luchas</h3>
+            <div id="participaciones-container">
+                {% if luchador %}
+                    {% for participacion in luchador.participaciones %}
+                        <div class="card mb-3 participacion-item">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Lucha</label>
+                                        <select class="form-select" name="lucha_id_{{ loop.index }}">
+                                            <option value="">Seleccionar lucha</option>
+                                            {% for l in luchas %}
+                                                <option value="{{ l.id }}" 
+                                                    {% if l.id == participacion.lucha_id %}selected{% endif %}>
+                                                    {{ l.nombre_completo }} ({{ l.estipulacion or 'Sin estipulación' }})
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Resultado*</label>
+                                        <select class="form-select" name="resultado_{{ loop.index }}" required>
+                                            <option value="Ganó" {% if participacion.resultado == 'Ganó' %}selected{% endif %}>Ganó</option>
+                                            <option value="Perdió" {% if participacion.resultado == 'Perdió' %}selected{% endif %}>Perdió</option>
+                                            <option value="Empate" {% if participacion.resultado == 'Empate' %}selected{% endif %}>Empate</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <button type="button" class="btn btn-danger remove-participacion">Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <button type="button" id="add-participacion" class="btn btn-secondary mb-4">+ Añadir Participación</button>
+            
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dinámica para añadir/eliminar títulos
+        document.getElementById('add-titulo').addEventListener('click', () => {
+            const container = document.getElementById('titulos-container');
+            const index = container.querySelectorAll('.titulo-item').length + 1;
+            
+            const html = `
+                <div class="card mb-3 titulo-item">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-label">Título</label>
+                                <select class="form-select" name="titulo_id_${index}">
+                                    <option value="">Seleccionar título</option>
+                                    {% for t in titulos %}
+                                        <option value="{{ t.id }}">{{ t.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Fecha Obtención*</label>
+                                <input type="date" class="form-control" name="fecha_obtencion_${index}" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Fecha Pérdida</label>
+                                <input type="date" class="form-control" name="fecha_perdida_${index}">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="button" class="btn btn-danger remove-titulo">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', html);
+        });
+
+        // Dinámica para añadir/eliminar participaciones
+        document.getElementById('add-participacion').addEventListener('click', () => {
+            const container = document.getElementById('participaciones-container');
+            const index = container.querySelectorAll('.participacion-item').length + 1;
+            
+            const html = `
+                <div class="card mb-3 participacion-item">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-label">Lucha</label>
+                                <select class="form-select" name="lucha_id_${index}">
+                                    <option value="">Seleccionar lucha</option>
+                                    {% for l in luchas %}
+                                        <option value="{{ l.id }}">{{ l.nombre_completo }} ({{ l.estipulacion or 'Sin estipulación' }})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Resultado*</label>
+                                <select class="form-select" name="resultado_${index}" required>
+                                    <option value="Ganó">Ganó</option>
+                                    <option value="Perdió">Perdió</option>
+                                    <option value="Empate">Empate</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="button" class="btn btn-danger remove-participacion">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', html);
+        });
+
+        // Delegación de eventos para eliminar elementos
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-titulo')) {
+                e.target.closest('.titulo-item').remove();
+            }
+            if (e.target.classList.contains('remove-participacion')) {
+                e.target.closest('.participacion-item').remove();
+            }
+        });
+    </script>
+</body>
+</html>
