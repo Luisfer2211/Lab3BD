@@ -10,9 +10,9 @@ Este laboratorio consiste en una aplicación web que permite realizar operacione
 
 ```
 /
-├── Fase_1/
+├── Parte_1/
 │   └── diagrama_bd.pdf
-├── Fase_2/
+├── Parte_2/
 │   ├── contraseña.py
 │   ├── contraseña.txt
 │   ├── models.py
@@ -24,22 +24,22 @@ Este laboratorio consiste en una aplicación web que permite realizar operacione
 │   └── templates/
 │       ├── index.html
 │       └── luchador_form.html
-├── Fase_3/
+├── Parte_3/
 │   └── analisis.pdf
 └── requirements.txt
 ```
 
 ### Descripción de Archivos
 
-- **Fase_1/diagrama_bd.pdf**: Diagrama Entidad-Relación de la base de datos
-- **Fase_2/contraseña.py**: Script para configurar la contraseña de PostgreSQL
-- **Fase_2/contraseña.txt**: Archivo generado que almacena la contraseña (no editar manualmente)
-- **Fase_2/models.py**: Definición de modelos ORM y generación del esquema
-- **Fase_2/inserts.py**: Script para insertar datos de prueba
-- **Fase_2/app.py**: Aplicación Flask principal
-- **Fase_2/DLL/**: Carpeta con scripts de create tables e inserts
-- **Fase_2/templates/**: Plantillas HTML para la interfaz web
-- **Fase_3/analisis.pdf**: Análisis reflexivo del proyecto
+- **Pare_1/diagrama_bd.pdf**: Diagrama Entidad-Relación de la base de datos
+- **Parte_2/contraseña.py**: Script para configurar la contraseña de PostgreSQL
+- **Parte_2/contraseña.txt**: Archivo generado que almacena la contraseña (no editar manualmente)
+- **Parte_2/models.py**: Definición de modelos ORM y generación del esquema
+- **Parte_2/inserts.py**: Script para insertar datos de prueba
+- **Parte_2/app.py**: Aplicación Flask principal
+- **Parte_2/DLL/**: Carpeta con scripts de create tables e inserts
+- **Parte_2/templates/**: Plantillas HTML para la interfaz web
+- **Parte_3/analisis.pdf**: Análisis reflexivo del proyecto
 
 ## 🛠️ Requisitos Previos
 
@@ -75,7 +75,7 @@ pip install -r requirements.txt
 ### 3. Configurar Contraseña de PostgreSQL
 
 ```bash
-python Fase_2/contraseña.py
+python Parte_2/contraseña.py
 ```
 
 Este script solicitará tu contraseña de PostgreSQL y generará el archivo `contraseña.txt`.
@@ -83,7 +83,7 @@ Este script solicitará tu contraseña de PostgreSQL y generará el archivo `con
 ### 4. Generar Esquema de Base de Datos
 
 ```bash
-python Fase_2/models.py
+python Parte_2/models.py
 ```
 
 Esto creará las tablas necesarias en la base de datos `wwe_db` y generará el archivo `schema.sql` (el mismo que está dentro de `DDL/`).
@@ -91,14 +91,14 @@ Esto creará las tablas necesarias en la base de datos `wwe_db` y generará el a
 ### 5. Insertar Datos de Prueba
 
 ```bash
-python Fase_2/inserts.py
+python Parte_2/inserts.py
 ```
 Esto le agregará datos a las tablas necesarias en la base de datos `wwe_db` y generará el archivo `inserts.sql` (el mismo que está dentro de `DDL/`).
 
 ### 6. Ejecutar la Aplicación
 
 ```bash
-python Fase_2/app.py
+python Parte_2/app.py
 ```
 
 La aplicación estará disponible en: `http://localhost:5000`
@@ -141,11 +141,11 @@ Esto permite mostrar eficientemente toda la información relevante en una sola c
 ## 🔄 Flujo de Ejecución Completo
 
 1. `pip install -r requirements.txt`
-2. `python Fase_2/contraseña.py`
+2. `python Parte_2/contraseña.py`
 3. Verificar que existe la BD `wwe_db`
-4. `python Fase_2/models.py`
-5. `python Fase_2/inserts.py`
-6. `python Fase_2/app.py`
+4. `python Parte_2/models.py`
+5. `python Parte_2/inserts.py`
+6. `python Parte_2/app.py`
 7. Abrir navegador en `http://localhost:5000`
 
 ## 👥 Autores
@@ -159,7 +159,7 @@ Facultad de Ingeniería – CC3088: Bases de Datos 1, Ciclo 1 2025
 ## 🔗 Enlaces
 
 - **Repositorio**: [https://github.com/Luisfer2211/Lab3BD](https://github.com/Luisfer2211/Lab3BD)
-- **Documentación adicional**: Ver archivos PDF en las carpetas Fase_1 y Fase_3
+- **Documentación adicional**: Ver archivos PDF en las carpetas Parte_1 y Parte_3
 
 ## 📝 Notas Importantes
 
