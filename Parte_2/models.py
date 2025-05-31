@@ -5,8 +5,11 @@ from sqlalchemy.schema import CreateTable, CreateIndex, DropTable, MetaData
 from sqlalchemy.sql.ddl import CreateSchema
 import os
 
-# 1. Configuración de conexión
-DATABASE_URI = 'postgresql://postgres:lol@localhost:5432/wwe_db'
+with open("contraseña.txt", "r", encoding="utf-8") as f:
+    password = f.read().strip()
+
+DATABASE_URI = f'postgresql://postgres:{password}@localhost:5432/wwe_db'
+
 Base = declarative_base()
 engine = create_engine(DATABASE_URI, echo=True)
 

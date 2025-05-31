@@ -3,12 +3,12 @@ from sqlalchemy.orm import sessionmaker
 from datetime import date
 import os
 
-# ------------------------------------------------------------------
-# 1. Configuración de conexión y modelos (idénticos a tu archivo "creates")
-# ------------------------------------------------------------------
+with open('contraseña.txt', 'r') as f:
+    password = f.read().strip()  
 
-# Cambia esta URI si tu usuario, contraseña o base de datos son distintos
-DATABASE_URI = 'postgresql://postgres:lol@localhost:5432/wwe_db'
+
+DATABASE_URI = f'postgresql://postgres:{password}@localhost:5432/wwe_db'
+
 
 from sqlalchemy import (
     Column, Integer, String, Date, Numeric,
@@ -101,9 +101,6 @@ class LuchadorTitulo(Base):
         CheckConstraint('fecha_perdida IS NULL OR fecha_perdida > fecha_obtencion', name='check_fechas_titulo'),
     )
 
-# ------------------------------------------------------------------
-# 2. Función para insertar los datos automáticamente vía SQLAlchemy
-# ------------------------------------------------------------------
 
 def insert_data():
     session = SessionLocal()
@@ -148,9 +145,6 @@ def insert_data():
     ]
     session.add_all(titulos)
     session.flush()
-
-    # 2.4. Insertar 15 luchas
-    # Para asignar show_id, asumo que los shows se insertaron en orden y sus IDs corresponden a 1..5
     luchas = [
         Lucha(show_id=1, tipo='Singles', estipulacion='Sin descalificación'),
         Lucha(show_id=1, tipo='Tag Team', estipulacion='Eliminación'),
@@ -171,8 +165,6 @@ def insert_data():
     session.add_all(luchas)
     session.flush()
 
-    # 2.5. Insertar 30 participaciones
-    # Asumo que los IDs de luchador y lucha corresponden a su orden de inserción
     participaciones_data = [
         # John Cena (luchador_id=1)
         (1, 1, 'Ganó'),
@@ -268,9 +260,6 @@ def insert_data():
     session.close()
     print("✅ Inserción de datos completada.")
 
-# ------------------------------------------------------------------
-# 3. Función para generar el archivo data.sql con los INSERTs en crudo
-# ------------------------------------------------------------------
 
 def generate_data_file():
     """Crea (o sobrescribe) data.sql con todos los INSERTs en crudo."""
@@ -394,17 +383,7 @@ def generate_data_file():
     print("✅ Archivo data.sql generado exitosamente.")
 
 
-# ------------------------------------------------------------------
-# 4. Punto de entrada
-# ------------------------------------------------------------------
 
 if __name__ == "__main__":
-    # 4.1. Primero asegurarse de que la estructura exista (tablas, enums, etc.)
-    #      Si aún no ejecutaste tu código de create_all, descomenta la línea siguiente:
-    # Base.metadata.create_all(engine)
-
-    # 4.2. Generar data.sql
     generate_data_file()
-
-    # 4.3. Insertar los datos en la base de datos
     insert_data()

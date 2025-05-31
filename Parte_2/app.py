@@ -1,12 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Enum, CheckConstraint, UniqueConstraint, text  # Añadir text aquí
+from sqlalchemy import Enum, CheckConstraint, UniqueConstraint, text
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import os
 
+with open('contraseña.txt', 'r') as f:
+    db_password = f.read().strip()
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:lol@localhost:5432/wwe_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:{db_password}@localhost:5432/wwe_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'supersecretkey'
 db = SQLAlchemy(app)
