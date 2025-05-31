@@ -18,6 +18,9 @@ Este laboratorio consiste en una aplicación web que permite realizar operacione
 │   ├── models.py
 │   ├── inserts.py
 │   ├── app.py
+│   ├── DDL/
+│       ├── schemas.sql
+│       └── inserts.sql
 │   └── templates/
 │       ├── index.html
 │       └── luchador_form.html
@@ -34,6 +37,7 @@ Este laboratorio consiste en una aplicación web que permite realizar operacione
 - **Fase_2/models.py**: Definición de modelos ORM y generación del esquema
 - **Fase_2/inserts.py**: Script para insertar datos de prueba
 - **Fase_2/app.py**: Aplicación Flask principal
+- **Fase_2/DLL/**: Carpeta con scripts de create tables e inserts
 - **Fase_2/templates/**: Plantillas HTML para la interfaz web
 - **Fase_3/analisis.pdf**: Análisis reflexivo del proyecto
 
