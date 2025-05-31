@@ -19,8 +19,8 @@ Este laboratorio consiste en una aplicación web que permite realizar operacione
 │   ├── inserts.py
 │   ├── app.py
 │   ├── DDL/
-│       ├── schemas.sql
-│       └── inserts.sql
+│   │   ├── schemas.sql
+│   │   └── inserts.sql
 │   └── templates/
 │       ├── index.html
 │       └── luchador_form.html
